@@ -721,10 +721,6 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if (word == "") {
-                            alert("값을 입력해주세요!!")
-                            return
-                        }
                         if (festival_list.includes(word))
                         {
                             let temp_html = `<div class="col">
@@ -749,6 +745,9 @@
                                         </div>`
                             $('#cards-box').append(temp_html)
                             break;
+                        } else {
+                            alert("검색한 결과가 없거나, 이상합니다!")
+                            return
                         }
 
                     }
@@ -762,10 +761,6 @@
 
 </head>
 <body>
-    <div class="btn_login">
-        <button>로그인</button>
-        <button>회원가입</button>
-    </div>
 
     <div class="mytitle">
         <h1>우리나라 축제</h1>
