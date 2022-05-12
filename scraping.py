@@ -40,7 +40,7 @@ for i in range(1, 10):
             count = count + 1
             num = len(festival_list) + count
 
-            print(num, name, img_url, real_date, date)
+            #print(num, name, img_url, real_date, date)
 
             doc = {
                 'num': num,
