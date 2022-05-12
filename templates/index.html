@@ -33,7 +33,6 @@
     <style>
         .mytitle {
             width: 100%;
-
             height: 400px;
             {#background-color: #5ECDB3;#}
             background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://ojsfile.ohmynews.com/STD_IMG_FILE/2021/0407/IE002786724_STD.jpg');
@@ -62,11 +61,10 @@
 
         .month {
             width: 80%;
-            max-width: 3000px;
+            max-width: 2800px;
             margin: 20px auto 0px auto;
             padding: 20px;
-            box-shadow: 0px 0px 3px 0px gray;
-
+            {#box-shadow: 0px 0px 3px 0px gray;#}
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -74,17 +72,14 @@
         }
 
         .month > div.btn_month {
-            margin: auto 0px auto auto;
-            width: 95%;
+            margin: auto auto auto auto;
             max-width: 1200px;
         }
 
-        .month > div.search_box {
-            background-color: green;
-            margin: 0px auto 0px auto;
-            width: 10%;
-            max-width: 1200px;
-
+        .search_box {
+            margin: 16px auto 0px auto;
+            width: 80%;
+            max-width: 480px;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -129,6 +124,17 @@
             margin-right: 20px;
             background-color: transparent;
         }
+
+        .card:hover{
+            transform: scale( 1.03 );
+            {#box-shadow: 5px 5px 5px rgba(211, 211, 211, 0.09);#}
+        }
+
+        .a:hover{
+            border: none;
+            color: white;
+            background-color: #03dac5;
+        }
     </style>
     <script>
         $(document).ready(function () {
@@ -159,8 +165,8 @@
             });
         }
 
-        {# 모든 페스티벌 정보 노출 #}
-        function listing() {
+
+         function listing() {
             $('#cards-box').empty()
 
             $.ajax({
@@ -192,7 +198,7 @@
                                                     <h5>${real_date}</h5>
                                                 </div>
                                                 <div class="a_2">
-                                                <button onclick="done_festival(${num})" style="border-color: white;"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                                                <button onclick="done_festival(${num})" style="border-color: white;"><span style="color: crimson"><i class="fa fa-heart-o" aria-hidden="true"></i></span></button>
                                                 </div>
                                             </div>
                                         </div>`
@@ -205,7 +211,7 @@
                                                     <h5>${real_date}</h5>
                                                 </div>
                                                 <div class="a_2">
-                                                <button onclick="cancel_festival(${num})" style="border-color: white;"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                                                <button onclick="cancel_festival(${num})" style="border-color: white;"><span style="color: crimson"><i class="fa fa-heart" aria-hidden="true"></i></span></button>
                                                 </div>
                                             </div>
                                         </div>`
@@ -217,7 +223,6 @@
             })
         }
 
-        {# 월 별 페스티벌 정보 노출 #}
         function January () {
             $.ajax({
                 type: "GET",
@@ -714,8 +719,8 @@
             });
         }
 
-        {# 페스티벌 검색 #}
-        function fes_Search(){
+        function fes_Search()
+        {
             let festival_list =[];
             let word = $("#search").val()
             $.ajax({
@@ -763,8 +768,8 @@
             })
         }
 
-        {# 페스티벌 등록 #}
-        function post(){
+        function post()
+        {
             let name = $("#fname").val()
             let img_url = $("#fimg_url").val()
             let real_date = $("#freal_date").val()
@@ -789,34 +794,24 @@
         }
 
     </script>
-
 </head>
 <body>
 
 <!-- 상단 고정 메뉴 -->
 <nav class="navbar is-transparent is-fixed-top nav-bg" role="navigation" aria-label="main navigation">
-{#    <div class="navbar-brand">#}
-{#        <a class="navbar-item" href="/">#}
-{#            <img src="{{ url_for('static', filename='logo.png') }}">#}
-{#            <strong class="is-sparta"#}
-{#                    style="font-family: 'Stylish', sans-serif;font-size: larger;">SWEETER</strong>#}
-{#        </a>#}
-{#    </div>#}
-    <!-- 로그인 회원가입 -->
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons" id="my-page" onclick="mypage('{{ user_info.username }}')">
           <a class="button is-primary">
             <strong>마이페이지</strong>
           </a>
-{#          <a class="button is-light">회원가입</a>#}
         </div>
       </div>
     </div>
 </nav>
 
 <section class="hero is-white">
-    <div class="hero-body has-text-centered mytitle" style="padding-bottom:1rem;margin:auto;">
+    <div class="hero-body has-text-centered mytitle" style="margin:auto;">
         <h1 class="title is-sparta">✨항해 Festival✨</h1>
         <h3 class="subtitle is-sparta">모든 축제를 한눈에</h3>
 
@@ -825,23 +820,24 @@
     <div class="month" id="post_month">
         <div class="btn_month">
             <button class="button is-primary is-outlined" onclick="listing()">전체</button>
-            <button class="button is-outlined" onclick="January()">1월</button>
-            <button class="button is-outlined" onclick="February()">2월</button>
-            <button class="button is-outlined" onclick="March()">3월</button>
-            <button class="button is-outlined" onclick="April()">4월</button>
-            <button class="button is-outlined" onclick="May()">5월</button>
-            <button class="button is-outlined" onclick="June()">6월</button>
-            <button class="button is-outlined" onclick="July()">7월</button>
-            <button class="button is-outlined" onclick="August()">8월</button>
-            <button class="button is-outlined" onclick="September()">9월</button>
-            <button class="button is-outlined" onclick="October()">10월</button>
-            <button class="button is-outlined" onclick="Novemver()">11월</button>
-            <button class="button is-outlined" onclick="December()">12월</button>
-            <button class="button is-outlined" onclick="cancel()">취소 및 연기</button>
+            <button class="button is-outlined a" onclick="January()">1월</button>
+            <button class="button is-outlined a" onclick="February()">2월</button>
+            <button class="button is-outlined a" onclick="March()">3월</button>
+            <button class="button is-outlined a" onclick="April()">4월</button>
+            <button class="button is-outlined a" onclick="May()">5월</button>
+            <button class="button is-outlined a" onclick="June()">6월</button>
+            <button class="button is-outlined a" onclick="July()">7월</button>
+            <button class="button is-outlined a" onclick="August()">8월</button>
+            <button class="button is-outlined a" onclick="September()">9월</button>
+            <button class="button is-outlined a" onclick="October()">10월</button>
+            <button class="button is-outlined a" onclick="Novemver()">11월</button>
+            <button class="button is-outlined a" onclick="December()">12월</button>
+            <button class="button is-outlined a" onclick="cancel()">취소 및 연기</button>
         </div>
-        <div class="search_box">
-            <input id="search" type="text" placeholder="검색어 입력"> <button class="button is-small is-responsive" onclick="fes_Search()">검색</button>
-        </div>
+    </div>
+    <div class="search_box">
+            <input id="search" type="text" class="input is-primary" placeholder="검색어 입력">
+            <button class="button is-responsive" style="margin-left: 8px"onclick="fes_Search()">검색</button>
     </div>
 </section>
 <section class="section">
@@ -891,7 +887,7 @@
                 {# 세 가지 경우 background - 다른 영역을 클릭하면 꺼진다, content close #}
             </div>
 </section>
-    <div class="mycards">
+    <div class="mycards" style="padding-bottom: 80px;">
         <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
 
         </div>
