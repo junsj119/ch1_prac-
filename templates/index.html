@@ -34,8 +34,7 @@
         .mytitle {
             width: 100%;
             height: 280px;
-            {#background-color: #5ECDB3;#}
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://ojsfile.ohmynews.com/STD_IMG_FILE/2021/0407/IE002786724_STD.jpg');
+        {#background-color: #5ECDB3;#} background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://ojsfile.ohmynews.com/STD_IMG_FILE/2021/0407/IE002786724_STD.jpg');
             background-position: center;
             background-size: cover;
             color: white;
@@ -60,17 +59,14 @@
         }
 
         .month {
-            width: 50%;
-            max-width: 2000px;
+            width: 1000px;
+            max-width: 1000px;
             margin: 10px auto 0px auto;
-            padding: 20px;
             box-shadow: 0px 0px 3px 0px gray;
-
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
             display: none;
         }
 
@@ -83,8 +79,7 @@
         .month > div.search_box {
             margin: 20px auto 0px auto;
             width: 95%;
-            max-width: 1200px;
-
+            max-width: 400px;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -92,10 +87,9 @@
         }
 
         .month > div.close_box {
-            margin: 20px auto 0px auto;
+            margin: 20px auto 10px auto;
             width: 95%;
             max-width: 1200px;
-
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -108,14 +102,11 @@
             max-width: 1200px;
         }
 
-        .btn_login {
-            margin-right: auto;
-        }
-
         .btn_login > button {
             margin: 10px 0px 10px auto;
             border: 1px solid black;
         }
+
         .btn_login > button:hover {
             border: 2px solid black;
         }
@@ -126,6 +117,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .a_1 > h5 {
             margin-right: 10px;
         }
@@ -134,8 +126,8 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-
         }
+
         .a_2 > button {
             margin-right: 20px;
             background-color: transparent;
@@ -150,24 +142,56 @@
             listing();
         });
 
-        function listing() {
+        function done_festival(num) {
+            $.ajax({
+                type: "POST",
+                url: "/festival/done",
+                data: {num_give: num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
+        function cancel_festival(num) {
+            $.ajax({
+                type: "POST",
+                url: "/festival/cancel",
+                data: {num_give: num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
+
+         function listing() {
+            $('#cards-box').empty()
+
             $.ajax({
                 type: 'GET',
                 url: '/festival',
                 data: {},
                 success: function (response) {
-                    $("#cards-box *").remove();
-                    let rows = response['festivals']
 
+                    let rows = response['festivals']
                     for (let i = 0; i < rows.length; i++) {
 
+                        let num = rows[i]['num']
                         let name = rows[i]['name']
                         let date = rows[i]['date']
                         let real_date = rows[i]['real_date']
+                        if(real_date == ''){
+                            real_date = " "
+                        }
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
+                        let temp_html = ``
 
-                        let temp_html = `<div class="col">
+                        if (like == 0) {
+                            temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
                                                 <div class="card-body">
@@ -175,16 +199,32 @@
                                                     <h5>${real_date}</h5>
                                                 </div>
                                                 <div class="a_2">
-                                                <button><i class="fa fa-heart" aria-hidden="true"></i></button>
+                                                <button onclick="done_festival(${num})" style="border-color: white;"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
                                                 </div>
                                             </div>
                                         </div>`
+                        } else{
+                            temp_html = `<div class="col">
+                                            <div class="card">
+                                                <img src=${image_url} class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5>${name}</h5>
+                                                    <h5>${real_date}</h5>
+                                                </div>
+                                                <div class="a_2">
+                                                <button onclick="cancel_festival(${num})" style="border-color: white;"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        }
                         $('#cards-box').append(temp_html)
+
                     }
                 }
             })
         }
-        function January () {
+
+        function January() {
             $.ajax({
                 type: "GET",
                 url: "/festival/group",
@@ -200,8 +240,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "01")
-                        {
+                        if (date == "01") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -223,7 +262,8 @@
                 }
             });
         }
-        function February () {
+
+        function February() {
             $.ajax({
                 type: "GET",
                 url: "/festival/group",
@@ -239,8 +279,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "02")
-                        {
+                        if (date == "02") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -261,7 +300,8 @@
                 }
             });
         }
-        function March () {
+
+        function March() {
             $.ajax({
                 type: "GET",
                 url: "/festival/group",
@@ -277,8 +317,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "03")
-                        {
+                        if (date == "03") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -299,7 +338,8 @@
                 }
             });
         }
-        function April () {
+
+        function April() {
             $.ajax({
                 type: "GET",
                 url: "/festival/group",
@@ -315,8 +355,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "04")
-                        {
+                        if (date == "04") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -337,6 +376,7 @@
                 }
             });
         }
+
         function May() {
             $.ajax({
                 type: "GET",
@@ -353,8 +393,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "05")
-                        {
+                        if (date == "05") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -375,6 +414,7 @@
                 }
             });
         }
+
         function June() {
             $.ajax({
                 type: "GET",
@@ -391,8 +431,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "06")
-                        {
+                        if (date == "06") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -413,6 +452,7 @@
                 }
             });
         }
+
         function July() {
             $.ajax({
                 type: "GET",
@@ -429,8 +469,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "07")
-                        {
+                        if (date == "07") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -451,6 +490,7 @@
                 }
             });
         }
+
         function August() {
             $.ajax({
                 type: "GET",
@@ -467,8 +507,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "08")
-                        {
+                        if (date == "08") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -489,6 +528,7 @@
                 }
             });
         }
+
         function September() {
             $.ajax({
                 type: "GET",
@@ -505,8 +545,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "09")
-                        {
+                        if (date == "09") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -527,6 +566,7 @@
                 }
             });
         }
+
         function October() {
             $.ajax({
                 type: "GET",
@@ -543,8 +583,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "10")
-                        {
+                        if (date == "10") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -565,6 +604,7 @@
                 }
             });
         }
+
         function Novemver() {
             $.ajax({
                 type: "GET",
@@ -581,8 +621,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "11")
-                        {
+                        if (date == "11") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -603,6 +642,7 @@
                 }
             });
         }
+
         function December() {
             $.ajax({
                 type: "GET",
@@ -619,8 +659,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "12")
-                        {
+                        if (date == "12") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -641,7 +680,8 @@
                 }
             });
         }
-        function cancel(){
+
+        function cancel() {
             $.ajax({
                 type: "GET",
                 url: "/festival/group",
@@ -657,8 +697,7 @@
                         let image_url = rows[i]['img_url']
                         let like = rows[i]['like']
 
-                        if(date == "")
-                        {
+                        if (date == "") {
                             let temp_html = `<div class="col">
                                             <div class="card">
                                                 <img src=${image_url} class="card-img-top" alt="...">
@@ -680,9 +719,8 @@
             });
         }
 
-        function fes_Search()
-        {
-            let festival_list =[];
+        function fes_Search() {
+            let festival_list = [];
             let word = $("#search").val()
             $.ajax({
                 type: 'GET',
@@ -704,8 +742,7 @@
                             alert("값을 입력해주세요!!")
                             return
                         }
-                        if (festival_list.includes(word))
-                        {
+                        if (festival_list.includes(word)) {
                             let temp_html = `<div class="col">
                                             <div class="card">
 
@@ -729,12 +766,11 @@
             })
         }
 
-        function post()
-        {
+        function post() {
             let name = $("#fname").val()
             let img_url = $("#fimg_url").val()
             let real_date = $("#freal_date").val()
-            let dates = real_date.split('.',2)
+            let dates = real_date.split('.', 2)
             let date = dates[1]
 
             $.ajax({
@@ -753,6 +789,7 @@
                 }
             })
         }
+
         function close_box() {
             $('#post_month').hide()
         }
@@ -764,23 +801,23 @@
 
 <!-- 상단 고정 메뉴 -->
 <nav class="navbar is-transparent is-fixed-top nav-bg" role="navigation" aria-label="main navigation">
-{#    <div class="navbar-brand">#}
-{#        <a class="navbar-item" href="/">#}
-{#            <img src="{{ url_for('static', filename='logo.png') }}">#}
-{#            <strong class="is-sparta"#}
-{#                    style="font-family: 'Stylish', sans-serif;font-size: larger;">SWEETER</strong>#}
-{#        </a>#}
-{#    </div>#}
+    {#    <div class="navbar-brand">#}
+    {#        <a class="navbar-item" href="/">#}
+    {#            <img src="{{ url_for('static', filename='logo.png') }}">#}
+    {#            <strong class="is-sparta"#}
+    {#                    style="font-family: 'Stylish', sans-serif;font-size: larger;">SWEETER</strong>#}
+    {#        </a>#}
+    {#    </div>#}
     <!-- 로그인 회원가입 -->
     <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons" id="my-page" onclick="mypage('{{ user_info.username }}')">
-          <a class="button is-primary">
-            <strong>마이페이지</strong>
-          </a>
-{#          <a class="button is-light">회원가입</a>#}
+        <div class="navbar-item">
+            <div class="buttons" id="my-page" onclick="mypage('{{ user_info.username }}')">
+                <a class="button is-primary">
+                    <strong>마이페이지</strong>
+                </a>
+                {#          <a class="button is-light">회원가입</a>#}
+            </div>
         </div>
-      </div>
     </div>
 </nav>
 
@@ -792,52 +829,52 @@
         <button onclick='$("#modal-post").addClass("is-active")'> 축제 등록하기</button>
     </div>
     <section class="section">
-                <div class="modal" id="modal-post">
-                    <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
-                    <div class="modal-content">
-                        <div class="box">
-                            <article class="media">
-                                <div class="media-content">
+        <div class="modal" id="modal-post">
+            <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
+            <div class="modal-content">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-content">
 
-                                    <div class="form-floating mb-3">
-                                        <input id="fimg_url" class="form-control">
-                                        <label>이미지Url</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input id="fname" class="form-control">
-                                        <label>축제 명</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input id="freal_date" class="form-control">
-                                        <label>날짜</label>
-                                    </div>
+                            <div class="form-floating mb-3">
+                                <input id="fimg_url" class="form-control">
+                                <label>이미지Url</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input id="fname" class="form-control">
+                                <label>축제 명</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input id="freal_date" class="form-control">
+                                <label>날짜</label>
+                            </div>
 
 
-                                    <nav class="level is-mobile">
-                                        <div class="level-left">
+                            <nav class="level is-mobile">
+                                <div class="level-left">
 
-                                        </div>
-
-                                        <div class="level-right">
-                                            <div class="level-item">
-                                                <a class="button is-sparta" onclick="post()">축제 등록</a>
-                                            </div>
-                                            <div class="level-item">
-                                                <a class="button is-sparta is-outlined"
-                                                   onclick='$("#modal-post").removeClass("is-active")'>취소</a>
-                                            </div>
-                                        </div>
-
-                                    </nav>
                                 </div>
-                            </article>
+
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <a class="button is-sparta" onclick="post()">축제 등록</a>
+                                    </div>
+                                    <div class="level-item">
+                                        <a class="button is-sparta is-outlined"
+                                           onclick='$("#modal-post").removeClass("is-active")'>취소</a>
+                                    </div>
+                                </div>
+
+                            </nav>
                         </div>
-                    </div>
-                    <button class="modal-close is-large" aria-label="close"
-                            onclick='$("#modal-post").removeClass("is-active")'></button>
-                    {# 세 가지 경우 background - 다른 영역을 클릭하면 꺼진다, content close #}
+                    </article>
                 </div>
-        </section>
+            </div>
+            <button class="modal-close is-large" aria-label="close"
+                    onclick='$("#modal-post").removeClass("is-active")'></button>
+            {# 세 가지 경우 background - 다른 영역을 클릭하면 꺼진다, content close #}
+        </div>
+    </section>
     <div class="month" id="post_month">
         <div class="btn_month">
             <button class="button is-primary is-outlined" onclick="listing()">전체</button>
@@ -856,7 +893,8 @@
             <button class="button is-outlined" onclick="cancel()">취소 및 연기</button>
         </div>
         <div class="search_box">
-            <input id="search" type="text" placeholder="검색어 입력"> <button class="button is-small is-responsive" onclick="fes_Search()">검색</button>
+            <input id="search" type="text" class="input is-primary" placeholder="검색어 입력">
+            <button class="button is-responsive" onclick="fes_Search()">검색</button>
         </div>
         <div class="close_box">
             <button class="button is-responsive" onclick="close_box()">닫기</button>
@@ -864,11 +902,9 @@
     </div>
 </section>
 
-    <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-
-        </div>
-    </div>
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box"></div>
+</div>
 
 </body>
 </html>

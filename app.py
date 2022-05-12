@@ -81,6 +81,19 @@ def festival_get():
     festival_list = list(db.festivals.find({}, {'_id': False}))
     return jsonify({'festivals':festival_list})
 
+# 축제 좋아요
+@app.route("/festival/done", methods=["POST"])
+def festival_done():
+    num_receive = request.form['num_give']
+    db.festivals.update_one({'num': num_receive}, {'$set': {'like': 1}})
+    return jsonify({'msg': '좋아요 *_*'})
+
+@app.route("/festival/cancel", methods=["POST"])
+def festival_cancel():
+    num_receive = request.form['num_give']
+    db.festivals.update_one({'num': num_receive}, {'$set': {'like': 0}})
+    return jsonify({'msg': '좋아요 취소'})
+
 #group
 @app.route("/festival/group", methods=["GET"])
 def festival_category():
@@ -217,7 +230,6 @@ def update_like():
             db.likes.delete_one(doc)
         count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
         return jsonify({"result": "success", 'msg': 'updated', "count": count})
-        return jsonify({"result": "success", 'msg': 'updated'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
