@@ -85,13 +85,13 @@ def festival_get():
 @app.route("/festival/done", methods=["POST"])
 def festival_done():
     num_receive = request.form['num_give']
-    db.festivals.update_one({'num': num_receive}, {'$set': {'like': 1}})
+    db.festivals.update_one({'num': int(num_receive)}, {'$set': {'like': 1}})
     return jsonify({'msg': '좋아요 *_*'})
 
 @app.route("/festival/cancel", methods=["POST"])
 def festival_cancel():
     num_receive = request.form['num_give']
-    db.festivals.update_one({'num': num_receive}, {'$set': {'like': 0}})
+    db.festivals.update_one({'num': int(num_receive)}, {'$set': {'like': 0}})
     return jsonify({'msg': '좋아요 취소'})
 
 #group
