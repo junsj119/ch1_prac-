@@ -33,6 +33,7 @@
     <style>
         .mytitle {
             width: 100%;
+
             height: 400px;
             {#background-color: #5ECDB3;#}
             background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://ojsfile.ohmynews.com/STD_IMG_FILE/2021/0407/IE002786724_STD.jpg');
@@ -158,8 +159,8 @@
             });
         }
 
-
-         function listing() {
+        {# 모든 페스티벌 정보 노출 #}
+        function listing() {
             $('#cards-box').empty()
 
             $.ajax({
@@ -216,6 +217,7 @@
             })
         }
 
+        {# 월 별 페스티벌 정보 노출 #}
         function January () {
             $.ajax({
                 type: "GET",
@@ -712,8 +714,8 @@
             });
         }
 
-        function fes_Search()
-        {
+        {# 페스티벌 검색 #}
+        function fes_Search(){
             let festival_list =[];
             let word = $("#search").val()
             $.ajax({
@@ -761,8 +763,8 @@
             })
         }
 
-        function post()
-        {
+        {# 페스티벌 등록 #}
+        function post(){
             let name = $("#fname").val()
             let img_url = $("#fimg_url").val()
             let real_date = $("#freal_date").val()
