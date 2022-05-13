@@ -57,5 +57,6 @@ for i in range(1, 10):
 
 driver.quit()  # 정보를 가져왔으므로 드라이버는 꺼줍니다.
 
+print(len(festival_list)+1)
 
 #contents > div.wrap_contView.clfix > div.box_leftType1 > ul > li:nth-child(1) > div.area_txt > div > a
